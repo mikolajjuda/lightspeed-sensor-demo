@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 bracket-lib = "~0.8"
 rand = "~0.8"
+specs = "~0.18"
+specs-derive = "~0.4"
