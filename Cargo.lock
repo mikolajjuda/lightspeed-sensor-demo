@@ -112,6 +112,7 @@ version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0f31b525fcd65027885f3a1e3a250a5dd397d70de4a6a5a125f03e0bef951499"
 dependencies = [
+ "specs",
  "ultraviolet",
 ]
 
@@ -148,6 +149,7 @@ dependencies = [
  "bracket-algorithm-traits",
  "bracket-geometry",
  "num-rational",
+ "rayon",
  "smallvec",
 ]
 
