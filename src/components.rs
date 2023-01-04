@@ -56,3 +56,8 @@ pub struct SensorStorage {
 #[derive(Component)]
 #[storage(HashMapStorage)]
 pub struct Player {}
+
+#[derive(Component)]
+pub struct Moving{
+    pub velocity: Point
+}

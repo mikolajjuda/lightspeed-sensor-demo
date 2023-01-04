@@ -9,6 +9,7 @@ mod state;
 use state::*;
 mod components;
 use components::*;
+mod movement_systems;
 mod sensor_systems;
 
 fn main() -> BError {
@@ -21,7 +22,7 @@ fn main() -> BError {
 
     gs.ecs
         .create_entity()
-        .with(Point { x: 50, y: 50 })
+        .with(Point { x: 45, y: 40 })
         .with(Renderable {
             fg: RGB::from(BLUE),
             ..Default::default()
@@ -40,6 +41,9 @@ fn main() -> BError {
             ..Default::default()
         })
         .with(Detectable {})
+        .with(Moving {
+            velocity: Point { x: -2, y: 1 },
+        })
         .build();
 
     gs.time_last_turn = Instant::now();

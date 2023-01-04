@@ -5,11 +5,11 @@ use specs::prelude::*;
 
 use super::components::*;
 use super::constants::*;
+use super::movement_systems::*;
 use super::sensor_systems::*;
 
 #[derive(Default, Debug)]
 pub struct Turn(pub u64);
-
 
 pub struct State {
     pub ecs: World,
@@ -28,6 +28,7 @@ impl State {
         w.register::<Sensor>();
         w.register::<SensorStorage>();
         w.register::<Detectable>();
+        w.register::<Moving>();
 
         w.insert(Turn::default());
 
@@ -72,6 +73,8 @@ impl GameState for State {
                 self.ecs.maintain();
                 let mut detector = Detector {};
                 detector.run_now(&self.ecs);
+                let mut mover = Mover {};
+                mover.run_now(&self.ecs);
 
                 self.turn_compute_time = turn_timer.elapsed();
                 self.time_last_turn = Instant::now();
@@ -89,6 +92,15 @@ impl GameState for State {
                 if render.hidden {
                     continue;
                 }
+                let view_rect = Rect::with_size(
+                    self.view_translation.x,
+                    -self.view_translation.y,
+                    MAP_VIEW_WIDTH as i32,
+                    MAP_VIEW_HEIGHT as i32,
+                );
+                if !view_rect.point_in_rect(*pos) {
+                    continue;
+                }
                 ctx.set(
                     pos.x - self.view_translation.x + 1,
                     pos.y + self.view_translation.y + 1,
@@ -100,7 +112,7 @@ impl GameState for State {
 
             let current_turn = self.ecs.read_resource::<Turn>().0;
 
-            //rendering detection info probably shoud be done using renderable component but I'm too lazy to write more systems right now
+            //rendering detection info probably shoud be done using renderable component but I'm to lazy to do that
             let players = self.ecs.read_storage::<Player>();
             let sensor_storages = self.ecs.read_storage::<SensorStorage>();
             for (_p, s) in (&players, &sensor_storages).join() {
@@ -108,6 +120,15 @@ impl GameState for State {
                 for di in d.iter().rev() {
                     if di.turn.0 != current_turn {
                         break;
+                    }
+                    let view_rect = Rect::with_size(
+                        self.view_translation.x,
+                        -self.view_translation.y,
+                        MAP_VIEW_WIDTH as i32,
+                        MAP_VIEW_HEIGHT as i32,
+                    );
+                    if !view_rect.point_in_rect(di.position) {
+                        continue;
                     }
                     ctx.set(
                         di.position.x - self.view_translation.x + 1,
