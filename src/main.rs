@@ -9,8 +9,9 @@ mod state;
 use state::*;
 mod components;
 use components::*;
-mod movement_systems;
+mod movement_system;
 mod sensor_systems;
+mod spawner_system;
 
 fn main() -> BError {
     let context = BTermBuilder::simple(CONSOLE_WIDTH, CONSOLE_HEIGHT)
@@ -28,7 +29,7 @@ fn main() -> BError {
             ..Default::default()
         })
         .with(Player {})
-        .with(Sensor { max_range: 100 })
+        .with(Sensor { max_range: 1000 })
         .with(SensorStorage::default())
         .with(Detectable {})
         .build();

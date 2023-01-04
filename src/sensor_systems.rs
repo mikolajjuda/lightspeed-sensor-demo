@@ -59,7 +59,7 @@ impl<'a> System<'a> for Detector {
             .par_join()
             .for_each(|(e, pos, s, mut ss)| {
                 for (gp, g) in (&positions, &ghosts).join() {
-                    let lightturns_distance = PYTHAGORAS.distance2d(*pos, *gp) as u32 / LIGHTSPEED;
+                    let lightturns_distance = (PYTHAGORAS.distance2d(*pos, *gp) / LIGHTSPEED as f32) as u32;
                     if s.max_range < lightturns_distance {
                         continue;
                     }

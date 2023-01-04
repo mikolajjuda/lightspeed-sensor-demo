@@ -3,9 +3,11 @@ use std::time::{Duration, Instant};
 use bracket_lib::prelude::*;
 use specs::prelude::*;
 
+use crate::spawner_system::Spawner;
+
 use super::components::*;
 use super::constants::*;
-use super::movement_systems::*;
+use super::movement_system::*;
 use super::sensor_systems::*;
 
 #[derive(Default, Debug)]
@@ -70,6 +72,8 @@ impl GameState for State {
 
                 let mut ghost_placer = GhostPlacer {};
                 ghost_placer.run_now(&self.ecs);
+                let mut spawner = Spawner {};
+                spawner.run_now(&self.ecs);
                 self.ecs.maintain();
                 let mut detector = Detector {};
                 detector.run_now(&self.ecs);
