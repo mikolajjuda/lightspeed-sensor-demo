@@ -29,7 +29,9 @@ fn main() -> BError {
             ..Default::default()
         })
         .with(Player {})
-        .with(Sensor { max_range: 1000 })
+        .with(Sensor {
+            max_range: 100000000,
+        })
         .with(SensorStorage::default())
         .with(Detectable {})
         .build();
@@ -44,6 +46,18 @@ fn main() -> BError {
         .with(Detectable {})
         .with(Moving {
             velocity: Point { x: -2, y: 1 },
+        })
+        .build();
+    gs.ecs
+        .create_entity()
+        .with(Point { x: 20, y: 10 })
+        .with(Renderable {
+            fg: RGB::from(RED),
+            ..Default::default()
+        })
+        .with(Detectable {})
+        .with(Moving {
+            velocity: Point { x: 2, y: 10 },
         })
         .build();
 

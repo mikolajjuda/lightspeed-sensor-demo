@@ -7,3 +7,4 @@ pub const CONSOLE_HEIGHT: u32 = 90;
 pub const MAP_VIEW_WIDTH: u32 = 150;
 pub const MAP_VIEW_HEIGHT: u32 = 80;
 pub const LIGHTSPEED: u32 = 10;
+pub const TIME_BETWEEN_TURNS: u64 = 500;

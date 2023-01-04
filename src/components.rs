@@ -41,7 +41,6 @@ pub struct Sensor {
     pub max_range: u32,
 }
 
-#[derive(Debug)]
 pub struct DetectionInfo {
     pub position: Point,
     pub turn: Turn,

@@ -10,8 +10,11 @@ use super::constants::*;
 use super::movement_system::*;
 use super::sensor_systems::*;
 
-#[derive(Default, Debug)]
+#[derive(Default)]
 pub struct Turn(pub u64);
+
+#[derive(Default)]
+pub struct NumGhosts(pub u64);
 
 pub struct State {
     pub ecs: World,
@@ -33,6 +36,7 @@ impl State {
         w.register::<Moving>();
 
         w.insert(Turn::default());
+        w.insert(NumGhosts::default());
 
         State {
             ecs: w,
@@ -62,7 +66,7 @@ impl GameState for State {
         {
             //turn
             let since_last_turn = self.time_last_turn.elapsed();
-            if since_last_turn > Duration::from_millis(1000) {
+            if since_last_turn > Duration::from_millis(TIME_BETWEEN_TURNS) {
                 ctx.print(0, CONSOLE_HEIGHT - 2, "TURN");
                 let turn_timer = Instant::now();
                 {
@@ -115,6 +119,7 @@ impl GameState for State {
             }
 
             let current_turn = self.ecs.read_resource::<Turn>().0;
+            let num_ghosts = self.ecs.read_resource::<NumGhosts>().0;
 
             //rendering detection info probably shoud be done using renderable component but I'm to lazy to do that
             let players = self.ecs.read_storage::<Player>();
@@ -148,12 +153,13 @@ impl GameState for State {
                 0,
                 CONSOLE_HEIGHT - 1,
                 format!(
-                    "view translation: ({}, {}); fps: {}; current turn: {}; turn compute time: {}",
+                    "view translation: ({}, {}); fps: {}; current turn: {}; turn compute time: {}; number of ghosts: {}",
                     self.view_translation.x,
                     self.view_translation.y,
                     ctx.fps,
                     current_turn,
-                    self.turn_compute_time.as_secs_f32()
+                    self.turn_compute_time.as_secs_f32(),
+                    num_ghosts
                 ),
             );
         }
